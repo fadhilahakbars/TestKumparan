@@ -69,18 +69,6 @@ app.get('/search', async (req, res) => {
     });
 });
 
-app.get('/author',(req, res) => {
-    const query = `SELECT * FROM authors ORDER BY name desc`;
-    client.query(query , (err, results) => {
-        if (err) {
-            console.error(err);
-            res.send(null);
-            return;
-        }
-        res.send(results.rows);
-    });
-});
-
 
 //server listening
 app.listen(port, () => {
