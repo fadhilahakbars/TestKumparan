@@ -36,9 +36,25 @@ app.post('/newArticle', function(req, res) {
     });
 });
 
-app.get('/search',(req, res) => {
-    const query = `SELECT * FROM articles where title like '%${req.body.title}%' AND body like '%${req.body.body}%' ORDER BY id desc;`;
-    client.query(query , (err, results) => {
+app.get('/search', async (req, res) => {
+	const title = req.body.title;
+	const body = req.body.body;
+	const author = req.body.author;
+	let query;
+	
+	if (title == undefined && body == undefined && author == undefined ){
+		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id ORDER BY created_at DESC;`;
+	}
+	else if (title == undefined && body == undefined && author != undefined){
+		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where name = '${author}' ORDER BY created_at DESC;`;    
+	}
+	else if (title != undefined && body != undefined && author == undefined){
+		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where title like '%${title}%' AND body like '%${body}%' ORDER BY created_at desc;`;    
+	}
+	else {
+		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where name = '${author}' AND title like '%${title}%' AND body like '%${body}%' ORDER BY created_at DESC;`; 
+	}
+    client.query(query ,(err, results) => {
          if (err) {
             console.log(err);
             res.statusCode = 500;
@@ -70,3 +86,5 @@ app.get('/author',(req, res) => {
 app.listen(port, () => {
     console.log(`Program sudah berjalan pada port ${port}`);
 });
+
+
