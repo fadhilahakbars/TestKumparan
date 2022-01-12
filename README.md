@@ -11,6 +11,7 @@ Jawaban
 ## Memasukkan data kedalam database
 1. Gunakanlah file command.sql untuk membuat database article 
 2. di dalam command tersebut terdapat pembuatan table articles dan author, kemudian ada insert data dari masing-masing table
+3. Catatan terdapat command index untuk mempercepat pemanggilan list article
 
 ## Menjalankan Node JS
 1. Gunakanlah file index.js yang ada di dalam folder backend
