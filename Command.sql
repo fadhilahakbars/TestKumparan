@@ -32,4 +32,4 @@ insert into articles (id, author_id, title, body, created_at) VALUES
 drop table articles;
 drop table authors;
 
-SELECT * FROM articles where title like '%G%' AND body like '%A%' ORDER BY id desc;
+create index idx_search_articles on articles(id, author_id, title, body, created_at);
