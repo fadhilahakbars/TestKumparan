@@ -15,6 +15,7 @@ const client = new Client({
     database: "postgres",
 });
 
+//Melakukan koneksi database
 client.connect((err) =>{
     if (err) {
         console.error(err);
@@ -23,7 +24,7 @@ client.connect((err) =>{
     console.log('Database Connected');
 });
 
-
+//route untuk melakukan request post newArticle
 app.post('/newArticle', function(req, res) {
     const query = `insert into articles (id, author_id, title, body, created_at) VALUES ('${req.body.id}', '${req.body.author_id}', '${req.body.title}', '${req.body.body}', '${req.body.created_at}'::timestamp)`;
     client.query(query, (err, results) => {
@@ -36,22 +37,23 @@ app.post('/newArticle', function(req, res) {
     });
 });
 
+//route untuk melakukan request get untuk mencari query yang diinginkan
 app.get('/search', async (req, res) => {
 	const title = req.body.title;
 	const body = req.body.body;
 	const author = req.body.author;
 	let query;
 	
-	if (title == undefined && body == undefined && author == undefined ){
+	if (title == undefined && body == undefined && author == undefined ){ //kondisi ketika title, body, dan nama author tidak ada
 		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id ORDER BY created_at DESC;`;
 	}
-	else if (title == undefined && body == undefined && author != undefined){
+	else if (title == undefined && body == undefined && author != undefined){ //kondisi ketika title dan body tidak ada sedangkan nama author ada
 		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where name = '${author}' ORDER BY created_at DESC;`;    
 	}
-	else if (title != undefined && body != undefined && author == undefined){
+	else if (title != undefined && body != undefined && author == undefined){ //kondisi ketika title dan body ada sedangkan nama author tidak ada
 		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where title like '%${title}%' AND body like '%${body}%' ORDER BY created_at desc;`;    
 	}
-	else {
+	else { //kondisi ketika title, body, dan nama author ada
 		query = `SELECT articles.id, articles.author_id, authors.name, title, body, created_at FROM articles inner join authors on articles.author_id = authors.id where name = '${author}' AND title like '%${title}%' AND body like '%${body}%' ORDER BY created_at DESC;`; 
 	}
     client.query(query ,(err, results) => {
