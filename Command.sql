@@ -1,5 +1,5 @@
 create table authors (id text not null unique primary key , name text not null );
-create table articles (id text not null unique primary key , author_id varchar(255) not null , title text not null , body text not null , created_at timestamp not null , constraint pk_id_authors foreign key (author_id) references authors(id));
+create table articles (id text not null unique primary key , author_id text not null , title text not null , body text not null , created_at timestamp not null , constraint pk_id_authors foreign key (author_id) references authors(id));
 
 insert into authors (id, name) values
 ('1', 'Fadhilah Akbar Suherman'),
